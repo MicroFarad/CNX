@@ -6,6 +6,9 @@
 #include "cnxrand.h"
 #include "cnxadapt.h"
 
+#include "iir.h"
+
+/*
 typedef struct
 {
 	int t;
@@ -40,9 +43,19 @@ int ProcessGainPrinter(void *gainprinter, int count)
 	}
 	return n;
 }
+*/
 
 int main(int argc, char **argv)
 {
+	IIR_FilterSpec spec;
+	spec.response = IIR_LOWPASS;
+	spec.design = IIR_BUTTERWORTH;
+	spec.Rp = 1;
+	spec.As = 10;
+	spec.freq.lp.dw = 0.1;
+	spec.freq.lp.wc = 2;
+	IIR_DesignFilter(&spec);
+	/*
 	CNXPA_Initialize();
 	CNX_Connector noise_splitter1;
 	CNX_Connector splitter1_amplifier;
@@ -104,4 +117,5 @@ int main(int argc, char **argv)
 	CNXPA_Terminate();
 	printf("pa terminated\n");
 	return 0;
+	*/
 }
