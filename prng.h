@@ -1,5 +1,5 @@
 /*
-Header file for xorshift128+ and plitmix64 PRNGs
+Header file for xorshift128+ and splitmix64 PRNGs
 This is a derivative work adapted in 2016 from Sebastiano Vigna's code at http://xorshift.di.unimi.it/ by Kyle Gagner
 Copyright (C) 2016 Kyle Gagner
 All rights reserved

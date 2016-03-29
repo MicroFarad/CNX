@@ -1,11 +1,13 @@
 /*
-Source file for xorshift128+ and plitmix64 PRNGs
+Source file for xorshift128+ and splitmix64 PRNGs
 This is a derivative work adapted in 2016 from Sebastiano Vigna's code at http://xorshift.di.unimi.it/ by Kyle Gagner
 Copyright (C) 2016 Kyle Gagner
 All rights reserved
 
 Sebastiano Vigna's original implementation is in the public domain and may be obtained at the above url
 */
+
+#include "prng.h"
 
 unsigned long long PRNG_splitmix64(unsigned long long *state)
 {
