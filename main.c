@@ -48,12 +48,25 @@ int ProcessGainPrinter(void *gainprinter, int count)
 int main(int argc, char **argv)
 {
 	IIR_FilterSpec spec;
-	spec.response = IIR_LOWPASS;
 	spec.design = IIR_BUTTERWORTH;
 	spec.Rp = 1;
 	spec.As = 10;
+	/*
+	spec.response = IIR_LOWPASS;
 	spec.freq.lp.dw = 0.1;
 	spec.freq.lp.wc = 2;
+	*/
+	/*
+	spec.response = IIR_HIGHPASS;
+	spec.freq.hp.dw = 0.1;
+	spec.freq.hp.wc = 2;
+	*/
+
+	spec.response = IIR_BANDPASS;
+	spec.freq.bp.dw = 0.1;
+	spec.freq.bp.wl = 1.5;
+	spec.freq.bp.wu = 2.0;
+
 	IIR_DesignFilter(&spec);
 	/*
 	CNXPA_Initialize();
