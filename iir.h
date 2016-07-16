@@ -7,7 +7,73 @@ All rights reserved
 #ifndef IIR_H
 #define IIR_H
 
-#include "constants.h"
+#include <complex.h>
+
+// represents the roots of a polynomial distinguishing between unpaired real and paired complex roots
+typedef struct
+{
+	int n_unpaired;
+	int n_paired;
+	double *unpaired;
+	double complex *paired;
+} IIR_PairedRoots;
+
+// a representation of a filter's transfer function by its poles and zeros and a constant
+typedef struct
+{
+	double k;
+	IIR_PairedRoots poles;
+	IIR_PairedRoots zeros;
+} IIR_PairedPZK;
+
+// represents a polynomial with real coefficients of maximum order 2
+typedef struct
+{
+	int order;
+	double coeffs[3];
+} IIR_RealQuadratic;
+
+// represents a polynomial with complex coefficients of maximum order 2
+typedef struct
+{
+	int order;
+	double complex coeffs[3];
+} IIR_ComplexQuadratic;
+
+// a representation of a second order filter's transfer function by its rational expression
+typedef struct
+{
+	IIR_RealQuadratic numerator;
+	IIR_RealQuadratic denominator;
+} IIR_QuadraticRationalExpression;
+
+/*
+// a second order filter section represented by coefficients
+typedef struct
+{
+	double b0;
+	double b1;
+	double b2;
+	double a1;
+	double a2;
+} IIR_SecondOrderSection;
+
+// a first order filter section represented by coefficients
+typedef struct
+{
+	double b0;
+	double b1;
+	double a1;
+} IIR_FirstOrderSection;
+
+// a representation of a filter by its first and second order sections
+typedef struct
+{
+	int n_order1;
+	int n_order2;
+	IIR_FirstOrderSection *order1;
+	IIR_SecondOrderSection *order2;
+} IIR_SectionedFilter;
 
 // constants to specify filter response
 #define IIR_LOWPASS  1
@@ -71,6 +137,53 @@ typedef struct
 	double gain;
 } IIR_FilterSOS;
 
-IIR_FilterSOS *IIR_DesignFilter(IIR_FilterSpec *spec);
+typedef struct
+{
+	double Wp;
+	double Ws;
+	double Rp;
+	double As;
+} IIR_AnalogDesignSpecification;
+*/
+typedef struct
+{
+	double Rp;
+	double As;
+	double Wp;
+	double Ws;
+} IIR_DesignSpec;
+
+typedef struct
+{
+	int n_paired;
+	int n_unpaired;
+	double Wc;
+} IIR_ButterworthSpec;
+
+typedef struct
+{
+	int n_paired;
+	int n_unpaired;
+	double e;
+	double Wc;
+} IIR_ChebychevSpec;
+
+void IIR_SubstituteRationalIntoPZK(IIR_PairedPZK *original, IIR_QuadraticRationalExpression *substitution, IIR_PairedPZK *result);
+
+double complex IIR_ResponsePairedRoots(double complex x, IIR_PairedRoots *roots);
+
+double complex IIR_ResponsePairedPZK(double complex x, IIR_PairedPZK *pzk);
+
+void IIR_AnalogSpecificationButterworth(IIR_DesignSpec *dspec, IIR_ButterworthSpec *fspec);
+
+void IIR_AnalogPrototypeButterworth(IIR_ButterworthSpec *fspec, IIR_PairedPZK *result);
+
+void IIR_AnalogSpecificationChebychevI(IIR_DesignSpec *dspec, IIR_ChebychevSpec *fspec);
+
+void IIR_AnalogPrototypeChebychevI(IIR_ChebychevSpec *fspec, IIR_PairedPZK *result);
+
+void IIR_AnalogSpecificationChebychevII(IIR_DesignSpec *dspec, IIR_ChebychevSpec *fspec);
+
+void IIR_AnalogPrototypeChebychevII(IIR_ChebychevSpec *fspec, IIR_PairedPZK *result);
 
 #endif
